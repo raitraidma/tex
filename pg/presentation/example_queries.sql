@@ -59,7 +59,7 @@ SELECT * FROM pggraph.kruskal('SELECT id, source, target, cost FROM pggraph_mst_
 
 CREATE OR REPLACE FUNCTION f_google_api_key() RETURNS varchar AS
 $$
-  SELECT 'AIzaSyBb_020z-CcUJ2x6pqOObqOi_WFgl3F-rU'::varchar;
+  SELECT 'GOOGLE_API_KEY'::varchar;
 $$
 LANGUAGE sql
   SECURITY DEFINER
