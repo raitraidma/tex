@@ -109,14 +109,14 @@ CREATE TABLE xxx (
 ...
 ```
 
-## Materialized Views
+### Materialized Views
 - New in Cassandra 3.0
 - Handle automated server-side denormalization
 - Only simple SELECT statements are supported
 - The columns of the source table's primary key must be part of the materialized view's primary key
 - Only one new column can be added to the materialized view's primary key
 
-# Indexing
+### Indexing
 - Provides a means to access data in Cassandra using attributes other than the partition key.
 - When you attempt a potentially expensive query, such as searching a range of rows, Cassandra requires the `ALLOW FILTERING` directive.
 
