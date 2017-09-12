@@ -1,0 +1,19 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# https://docs.vagrantup.com
+Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.provision :shell, path: "bootstrap.sh"
+  config.vm.network "forwarded_port", host_ip: "127.0.0.1", guest: 8000, host: 8000 # timeseries demo app
+  config.vm.network "forwarded_port", host_ip: "127.0.0.1", guest: 9000, host: 9000 # portainer
+  config.vm.network "forwarded_port", host_ip: "127.0.0.1", guest: 9142, host: 9142 # cassandra-1
+  config.vm.network "forwarded_port", host_ip: "127.0.0.1", guest: 9242, host: 9242 # cassandra-2
+  config.vm.network "forwarded_port", host_ip: "127.0.0.1", guest: 9342, host: 9342 # cassandra-3
+
+   config.vm.provider "virtualbox" do |vb|
+     vb.gui = false
+     vb.memory = "4096"
+     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+   end
+end

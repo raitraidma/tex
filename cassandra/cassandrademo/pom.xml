@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.github.raitraidma</groupId>
+  <artifactId>timeseries</artifactId>
+  <version>1.0</version>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <cassandra-driver.version>3.3.0</cassandra-driver.version>
+    <io.fabric8.docker.maven.plugin.version>0.16.9</io.fabric8.docker.maven.plugin.version>
+    <docker.base.image>openjdk:8-jre</docker.base.image>
+    <spring.boot.version>1.5.2.RELEASE</spring.boot.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>${spring.boot.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.datastax.cassandra</groupId>
+      <artifactId>cassandra-driver-core</artifactId>
+      <version>${cassandra-driver.version}</version>
+    </dependency>
+  </dependencies>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring.boot.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>${io.fabric8.docker.maven.plugin.version}</version>
+        <configuration>
+          <images>
+            <image>
+              <name>${project.artifactId}:${project.version}</name>
+              <build>
+                <ports>
+                  <port>8000</port>
+                </ports>
+                <assembly>
+                  <basedir>/app</basedir>
+                  <descriptorRef>artifact</descriptorRef>
+                </assembly>
+                <from>${docker.base.image}</from>
+                <cmd>java -server -Djava.security.egd=file:/dev/./urandom -jar /app/${project.build.finalName}.jar</cmd>
+              </build>
+            </image>
+          </images>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

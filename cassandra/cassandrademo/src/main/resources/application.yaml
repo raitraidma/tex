@@ -1,0 +1,8 @@
+server:
+  port: 8000
+  context-path: /timeseries
+time-series:
+  cassandra:
+    keyspace: ${CASSANDRA_KEYSPACE:timeseries}
+    contact-points: ${CASSANDRA_CONTACT_POINTS:127.0.0.1}
+    port: ${CASSANDRA_PORT:9142}

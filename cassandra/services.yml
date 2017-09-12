@@ -1,0 +1,88 @@
+version: '3'
+
+services:
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - demo
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+
+  cassandra1:
+    image: cassandra:3.11
+    ports:
+      - 9142:9042
+    volumes:
+      - cassandra1:/var/lib/cassandra
+    networks:
+      - demo
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra_demo_cluster
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra1
+      - MAX_HEAP_SIZE=600M
+      - HEAP_NEWSIZE=400M
+
+  cassandra2:
+    image: cassandra:3.11
+    ports:
+      - 9242:9042
+    depends_on:
+      - cassandra1
+    volumes:
+      - cassandra2:/var/lib/cassandra
+    networks:
+      - demo
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra_demo_cluster
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra2
+      - CASSANDRA_SEEDS=cassandra1
+      - MAX_HEAP_SIZE=600M
+      - HEAP_NEWSIZE=400M
+
+  cassandra3:
+    image: cassandra:3.11
+    ports:
+      - 9342:9042
+    depends_on:
+      - cassandra1
+    volumes:
+      - cassandra3:/var/lib/cassandra
+    networks:
+      - demo
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra_demo_cluster
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra3
+      - CASSANDRA_SEEDS=cassandra1
+      - MAX_HEAP_SIZE=600M
+      - HEAP_NEWSIZE=400M
+
+  timeseries:
+    image: timeseries:1.0
+    ports:
+      - 8000:8000
+    depends_on:
+      - cassandra1
+    networks:
+      - demo
+    environment:
+      - CASSANDRA_CONTACT_POINTS=cassandra1
+      - CASSANDRA_PORT=9042
+      - CASSANDRA_KEYSPACE=timeseries
+
+volumes:
+  cassandra1:
+  cassandra2:
+  cassandra3:
+
+networks:
+  demo:
