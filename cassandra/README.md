@@ -75,6 +75,11 @@ Client read or write requests can be sent to any node in the cluster because all
         - Places replicas in the same data center by walking the ring clockwise until reaching the first node in another rack
 - Sets replication factor
 
+```cql
+CREATE KEYSPACE xxx
+  WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
+```
+
 ### Primary key
 - Spread Data Evenly Around the Cluster (hash of the partition key)
 - Minimize the Number of Partitions Read
@@ -104,5 +109,19 @@ CREATE TABLE xxx (
 ...
 ```
 
+## Materialized Views
+- New in Cassandra 3.0
+- Handle automated server-side denormalization
+- Only simple SELECT statements are supported
+- The columns of the source table's primary key must be part of the materialized view's primary key
+- Only one new column can be added to the materialized view's primary key
+
+# Indexing
+- Provides a means to access data in Cassandra using attributes other than the partition key.
+- When you attempt a potentially expensive query, such as searching a range of rows, Cassandra requires the `ALLOW FILTERING` directive.
+
+```cql
+CREATE INDEX xxx ON table_name( column_name );
+```
 ## Alternatives to Cassandra
 - [Scylla](http://www.scylladb.com/)
