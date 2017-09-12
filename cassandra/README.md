@@ -76,8 +76,7 @@ Client read or write requests can be sent to any node in the cluster because all
 - Sets replication factor
 
 ```cql
-CREATE KEYSPACE xxx
-  WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
+CREATE KEYSPACE xxx WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
 ```
 
 ### Primary key
@@ -92,7 +91,6 @@ CREATE KEYSPACE xxx
 - If you have too much data in a partition and want to spread the data over multiple nodes, use a composite partition key
 
 ```cql
-...
 CREATE TABLE xxx (
   ...
   PRIMARY KEY ((partition_key_part_1, partition_key_part_2), clustering_column_1, clustering_column_2)
@@ -102,11 +100,9 @@ CREATE TABLE xxx (
 If we want to control the sort order as a default of the data model, we can specify that at table creation time using the `CLUSTERING ORDER BY` clause:
 
 ```cql
-...
 CREATE TABLE xxx (
    ...
 ) WITH CLUSTERING ORDER BY (clustering_column_1 DESC, clustering_column_2 ASC);
-...
 ```
 
 ### Materialized Views
