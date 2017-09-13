@@ -115,9 +115,11 @@ CREATE TABLE xxx (
 ### Indexing
 - Provides a means to access data in Cassandra using attributes other than the partition key.
 - When you attempt a potentially expensive query, such as searching a range of rows, Cassandra requires the `ALLOW FILTERING` directive.
+- Does NOT support spatial indices, but you can use (implement yourself) [Geohash](https://en.wikipedia.org/wiki/Geohash) for spatial queries.
 
 ```cql
 CREATE INDEX xxx ON table_name( column_name );
 ```
+
 ## Alternatives to Cassandra
 - [Scylla](http://www.scylladb.com/)
